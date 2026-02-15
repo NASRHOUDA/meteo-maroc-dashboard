@@ -27,7 +27,7 @@ Ce projet est un **pipeline Data Engineering complet** qui collecte, transforme 
 ## 🏗️ **ARCHITECTURE**
 OpenWeatherMap API → Extraction → MongoDB → Transformation → Dashboard → Monitoring
 
-text
+
 
 ---
 
