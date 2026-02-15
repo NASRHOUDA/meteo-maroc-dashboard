@@ -604,7 +604,14 @@ if not df.empty and selected_villes:
                 font_color='white'
             )
             st.plotly_chart(fig_map, use_container_width=True)
-
+            st.markdown("""
+    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; margin-top: 10px;">
+        <p style="color: white; margin: 0; text-align: center;">
+            <span style="color: #90CAF9;">●</span> Taille des cercles proportionnelle à la température
+            • Survolez les points pour voir les détails
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
         with tab5:
             # Graphique circulaire des conditions météo
             conditions_count = df_filtered['conditions'].value_counts().reset_index()
