@@ -1,0 +1,42 @@
+# Environnement
+.env
+.env.local
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Données
+data/raw/*
+data/processed/*
+data/output/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/output/.gitkeep
+
+# Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+airflow/logs/
+logs/
+
+# Docker
+*.pid
+docker/.env
+
+# Kubernetes
+kubeconfig
+
+# Tests
+.coverage
+htmlcov/
+.pytest_cache/

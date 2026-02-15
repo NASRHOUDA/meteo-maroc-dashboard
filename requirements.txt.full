@@ -1,0 +1,33 @@
+# Data Processing
+pandas==2.0.3
+numpy==1.24.3
+
+# API & Web
+requests==2.31.0
+python-dotenv==1.0.0
+
+# MongoDB - UNIQUEMENT pymongo (supprimer mongodb)
+pymongo==4.5.0
+motor==3.3.1
+
+# Visualization
+plotly==5.15.0
+streamlit==1.25.0
+
+# Testing
+pytest==7.4.0
+pytest-cov==4.1.0
+
+# Logging
+loguru==0.7.2
+
+# Orchestration
+apache-airflow==2.7.1
+
+# Monitoring
+prometheus-client==0.17.1
+
+# Utils
+click==8.1.6
+colorama==0.4.6
+tqdm==4.65.0
