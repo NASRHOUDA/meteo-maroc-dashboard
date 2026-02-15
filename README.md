@@ -137,6 +137,7 @@ Le pipeline GitHub Actions s'exécute à chaque push :
 ✅ CI/CD GitHub Actions
 ## 📸 **APERÇU DU PROJET**
 
+
 ### Dashboard Principal
 ![Dashboard Principal](images/screenshot-dashboard.png)
 
@@ -149,18 +150,16 @@ Le pipeline GitHub Actions s'exécute à chaque push :
 ### Orchestration Airflow
 ![Airflow DAG](images/screenshot-airflow.png)
 
-###Monitoring avec Prometheus
+### Monitoring avec Prometheus
 ![Monitoring Prometheus](images/screenshot-prometheus.png)
 
 ### Monitoring Grafana
 ![Monitoring Grafana](images/screenshot-grafana.png)
 
-###CI/CD avec GitHub Actions
-!CI/CD](images/screenshot-cicd.png)
-
----
+### CI/CD avec GitHub Actions
+![CI/CD Pipeline](images/screenshot-cicd.png)
 
 👩‍💻 AUTEUR
 NASRHOUDA - Data Engineer / DevOps
 
-https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/NASRHOUDA)
