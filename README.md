@@ -155,6 +155,11 @@ Le pipeline GitHub Actions s'exécute à chaque push :
 ### Monitoring Grafana
 ![Monitoring Grafana](images/screenshot-grafana.png)
 
+###CI/CD avec GitHub Actions
+!CI/CD](images/screenshot-cicd.png)
+
+---
+
 👩‍💻 AUTEUR
 NASRHOUDA - Data Engineer / DevOps
 
