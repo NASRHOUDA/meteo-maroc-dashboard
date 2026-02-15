@@ -11,9 +11,9 @@ jobs:
     name: 🧪 Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - name: Python setup
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install dependencies
@@ -21,40 +21,37 @@ jobs:
           pip install pytest
           pip install -r requirements.txt
       - name: Run tests
-        run: |
-          pytest tests/ -v
+        run: pytest tests/ -v
 
   build:
-    name: 🏗️ Build (simulated)
+    name: 🏗️ Build
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - uses: actions/checkout@v3
-      - name: Simulate build
+      - uses: actions/checkout@v4
+      - name: Create build artifact
         run: |
-          echo "🔨 Simulation de build..."
+          echo "Build réussi !" > build.txt
           mkdir -p dist
-          echo "Build ${{ github.sha }}" > dist/version.txt
-          echo "✅ Build simulé avec succès"
+          cp build.txt dist/
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: dist/
 
   deploy:
-    name: 🚀 Deploy (simulated)
+    name: 🚀 Deploy
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-artifact
           path: dist/
-      - name: Simulate deploy
+      - name: Deploy
         run: |
-          VERSION=$(cat dist/version.txt)
-          echo "🚀 Déploiement simulé de la version $VERSION"
-          echo "✅ Succès"
+          cat dist/build.txt
+          echo "✅ Déploiement simulé réussi"
