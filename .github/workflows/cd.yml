@@ -1,0 +1,40 @@
+name: CD - Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'dashboards/**'
+      - 'requirements.txt'
+      - 'src/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run deployment script
+        run: |
+          echo "🚀 Déploiement en cours..."
+          echo "📦 Version: ${{ github.sha }}"
+          echo "📅 Date: $(date)"
+          echo "✅ Déploiement simulé avec succès !"
+
+      # Optionnel : Déploiement réel sur Streamlit Cloud
+      # - name: Deploy to Streamlit Cloud
+      #   env:
+      #     STREAMLIT_TOKEN: ${{ secrets.STREAMLIT_TOKEN }}
+      #   run: |
+      #     curl -X POST -H "Authorization: Bearer $STREAMLIT_TOKEN" ...
