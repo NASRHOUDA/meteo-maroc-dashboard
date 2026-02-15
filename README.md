@@ -88,8 +88,11 @@ Accédez à : http://localhost:8501
 bash
 cd docker
 docker-compose up -d --build
-Services disponibles
-Dashboard : http://localhost:8501
+
+---
+
+## **Services disponibles**
+**Dashboard** : http://localhost:8501
 
 MongoDB Express : http://localhost:8081 (admin/admin123)
 
