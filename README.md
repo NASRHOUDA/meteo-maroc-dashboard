@@ -91,7 +91,7 @@ docker-compose up -d --build
 
 ---
 
-## **Services disponibles**
+Services disponibles
 **Dashboard** : http://localhost:8501
 
 MongoDB Express : http://localhost:8081 (admin/admin123)
@@ -165,4 +165,3 @@ Le pipeline GitHub Actions s'exécute à chaque push :
 👩‍💻 AUTEUR
 NASRHOUDA - Data Engineer / DevOps
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/NASRHOUDA)
