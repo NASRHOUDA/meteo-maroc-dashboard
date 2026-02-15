@@ -309,7 +309,7 @@ def convert_to_maroc_time(utc_dt):
 def init_mongodb():
     try:
         client = MongoClient(
-            'mongodb://meteo_user:meteo_password@mongodb:27017/',
+            'mongodb://meteo_user:meteo_password@localhost:27017/',
             serverSelectionTimeoutMS=3000,
             connectTimeoutMS=3000
         )
@@ -521,7 +521,147 @@ if not df.empty and selected_villes:
                 <p class="metric-delta">{len(df_filtered)} mesures • {len(selected_villes)} sélectionnées</p>
             </div>
             """, unsafe_allow_html=True)
-        
+
+        # ============================================
+        # NOUVELLES FONCTIONNALITÉS
+        # ============================================
+
+        # Statistiques avancées
+        with st.expander("📊 Statistiques avancées", expanded=False):
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("🌡️ Température min", f"{df_filtered['temperature'].min():.1f}°C")
+                st.metric("🌡️ Température max", f"{df_filtered['temperature'].max():.1f}°C")
+                st.metric("📊 Écart-type", f"{df_filtered['temperature'].std():.2f}")
+            
+            with col2:
+                st.metric("💧 Humidité min", f"{df_filtered['humidite'].min():.0f}%")
+                st.metric("💧 Humidité max", f"{df_filtered['humidite'].max():.0f}%")
+                st.metric("📊 Écart-type", f"{df_filtered['humidite'].std():.1f}")
+            
+            with col3:
+                st.metric("💨 Vent min", f"{df_filtered['vent_vitesse'].min():.1f} m/s")
+                st.metric("💨 Vent max", f"{df_filtered['vent_vitesse'].max():.1f} m/s")
+                st.metric("📊 Écart-type", f"{df_filtered['vent_vitesse'].std():.1f}")
+
+        # Nouvelle ligne de séparation
+        st.markdown("---")
+
+        # Nouveaux onglets
+        tab4, tab5, tab6 = st.tabs(["🗺️ Carte", "🥧 Répartition", "📈 Indice de confort"])
+
+        with tab4:
+            # Carte interactive
+            fig_map = go.Figure()
+            
+            # Coordonnées approximatives des villes
+            coords = {
+                "Casablanca": (33.5731, -7.5898), "Rabat": (34.0209, -6.8416),
+                "Marrakech": (31.6295, -7.9811), "Fes": (34.0181, -5.0078),
+                "Tangier": (35.7595, -5.8340), "Agadir": (30.4278, -9.5981),
+                "Oujda": (34.6814, -1.9086), "Meknes": (33.8815, -5.5731),
+                "Tetouan": (35.5785, -5.3684), "Safi": (32.2994, -9.2372),
+                "El Jadida": (33.2316, -8.5007), "Nador": (35.1681, -2.9335),
+                "Kenitra": (34.2610, -6.5802), "Beni Mellal": (32.3394, -6.3608),
+                "Taza": (34.2145, -4.0201), "Ifrane": (33.5273, -5.1107),
+                "Essaouira": (31.5125, -9.7700), "Chefchaouen": (35.1711, -5.2697),
+                "Ouarzazate": (30.9199, -6.8935)
+            }
+            
+            for ville in df_filtered['ville']:
+                if ville in coords:
+                    lat, lon = coords[ville]
+                    temp = df_filtered[df_filtered['ville'] == ville]['temperature'].values[0]
+                    
+                    fig_map.add_trace(go.Scattergeo(
+                        lon=[lon],
+                        lat=[lat],
+                        text=f"{ville}: {temp}°C",
+                        mode='markers',
+                        marker=dict(
+                            size=temp*1.5,
+                            color=temp,
+                            colorscale='RdYlBu_r',
+                            showscale=True,
+                            colorbar=dict(title="Température °C")
+                        )
+                    ))
+            
+            fig_map.update_layout(
+                title="🗺️ Carte météo du Maroc",
+                geo=dict(
+                    scope='africa',
+                    showland=True,
+                    landcolor='rgb(243, 243, 243)',
+                    countrycolor='rgb(204, 204, 204)',
+                    lonaxis_range=[-15, -1],
+                    lataxis_range=[27, 36],
+                    projection_scale=5
+                ),
+                height=500,
+                paper_bgcolor='rgba(0,0,0,0)',
+                font_color='white'
+            )
+            st.plotly_chart(fig_map, use_container_width=True)
+
+        with tab5:
+            # Graphique circulaire des conditions météo
+            conditions_count = df_filtered['conditions'].value_counts().reset_index()
+            conditions_count.columns = ['condition', 'count']
+            
+            fig_pie = px.pie(
+                conditions_count,
+                values='count',
+                names='condition',
+                title="🥧 Répartition des conditions météo",
+                color_discrete_sequence=px.colors.sequential.Blues_r,
+                hole=0.3
+            )
+            fig_pie.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                font_color='white'
+            )
+            st.plotly_chart(fig_pie, use_container_width=True)
+
+        with tab6:
+            # Indice de confort (température idéale 20-25°C, humidité 40-60%)
+            df_filtered['confort'] = (
+                100 - abs(df_filtered['temperature'] - 22) * 5 - abs(df_filtered['humidite'] - 50) * 0.5
+            ).clip(0, 100)
+            
+            fig_confort = px.bar(
+                df_filtered.sort_values('confort', ascending=False),
+                x='ville',
+                y='confort',
+                color='confort',
+                color_continuous_scale=['#FF4444', '#FFA444', '#4CAF50'],
+                title="📊 Indice de confort (plus c'est haut, mieux c'est)",
+                labels={'confort': 'Indice (%)', 'ville': ''},
+                text_auto='.0f',
+                height=400
+            )
+            fig_confort.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font_color='white'
+            )
+            fig_confort.update_traces(textfont_color='white', textposition='outside')
+            st.plotly_chart(fig_confort, use_container_width=True)
+
+        # Bouton d'export CSV
+        st.markdown("---")
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            csv = df_filtered.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="📥 Télécharger les données (CSV)",
+                data=csv,
+                file_name=f"meteo_maroc_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+
         # ===== HEURE MAROC DANS LES TABS - BLEU CLAIR =====
         st.markdown(f"""
         <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0 0.5rem 0;">
